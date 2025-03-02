@@ -1,0 +1,141 @@
+﻿@model QuanLyThuVien.AccountRole
+
+@{
+    ViewBag.Title = "EditAccountView";
+}
+
+@section style{
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+
+            margin-bottom: 20px;
+            color: #0d6efd;
+        }
+
+        .form-check {
+            margin-top: 10px;
+        }
+
+        .card {
+            width: 240px;
+            height: 254px;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            background: #fff;
+            border-radius: 20px;
+        }
+    </style>
+}
+
+<section class="testimonial py-5" id="testimonial">
+    <div class="container">
+        <div class="row">
+            <div class="card">
+                <h2 class="form-title">Cập Nhập Tài Khoản</h2>
+                @using (Html.BeginForm("EditAccountView", "Account", FormMethod.Post, new { @class = "form-horizontal", id = "editAccountForm" }))
+                {
+                    @Html.HiddenFor(model => model.No)
+                    <span>Mật khẩu</span>
+                    <div class="input-container">
+                        @Html.TextBoxFor(m => m.account.Name, new { @class = "input-field", placeholder = "Họ tên" })
+                        @Html.ValidationMessageFor(m => m.account.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <label>Tên đăng nhập</label>
+                    <div class="input-container">
+                        @Html.TextBoxFor(m => m.account.Username, new { @class = "input-field", placeholder = "Tên đăng nhập" })
+                        <label for="input-field" class="input-label">Tên đăng nhập</label>
+                        @Html.ValidationMessageFor(m => m.account.Username, "", new { @class = "text-danger" })
+                    </div>
+
+                    <label>Vai trò</label>
+                    <div class="input-container">
+                        @Html.DropDownListFor(accountRole => accountRole.RoleID, (IEnumerable<SelectListItem>)ViewBag.RoleList, new { @class = "form-control" })
+                        <label for="input-field" class="input-label">Vai trò</label>
+                    </div>
+
+                    <label>Tình trạng</label>
+                    <div class="input-container">
+                        @Html.DropDownListFor(accountRole => accountRole.account.Status, (IEnumerable<SelectListItem>)ViewBag.StatusList, new { @class = "form-control" })
+                        <label for="input-field" class="input-label">Tình trạng</label>
+                    </div>
+
+                    <div class="btn-container">
+                        <div class="card-button-wrapper">
+                            <button onclick="window.location.href='@Url.Action("AccountView", "Account")'" type="button" class="card-button secondary">
+                                <i class="fa fa-times"></i> Hủy
+                            </button>
+                            <button type="submit" class="card-button primary">
+                                <i class="fa fa-check"></i> Xác nhận
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section script{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="~/Content/css/comboboxStyle.css" rel="stylesheet" />
+    <link href="~/Content/css/editBtnSubmitStyle.css" rel="stylesheet" />
+    <link href="~/Content/css/textboxStyle.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('#editAccountForm').on('submit', function (e) {
+                e.preventDefault(); // Ngăn form gửi dữ liệu theo cách mặc định
+
+                // Giả lập gửi dữ liệu thành công
+                $.ajax({
+                    url: '@Url.Action("EditAccountView", "Account")',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            // Hiển thị thông báo thành công
+                            $('#modalMessageBody').text(response.message || 'Cập nhật thành công!');
+                            $('#messageModal').modal('show');
+
+                            // Đợi modal hiển thị 2 giây, sau đó chuyển hướng về trang chính
+                            setTimeout(function () {
+                                window.location.href = '@Url.Action("AccountView", "Account")';
+                            }, 2000);
+                        } else {
+                            // Hiển thị thông báo lỗi
+                            $('#modalMessageBody').text(response.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+                            $('#messageModal').modal('show');
+                        }
+                    },
+                    error: function () {
+                        // Hiển thị thông báo lỗi khi xảy ra lỗi không mong muốn
+                        $('#modalMessageBody').text('Có lỗi xảy ra, vui lòng thử lại.');
+                        $('#messageModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+

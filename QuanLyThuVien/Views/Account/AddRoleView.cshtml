@@ -1,0 +1,121 @@
+﻿@model QuanLyThuVien.Role
+
+@{
+    ViewBag.Title = "AddRoleView";
+}
+
+@section style{
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0d6efd;
+        }
+
+        .form-check {
+            margin-top: 10px;
+        }
+
+        .card {
+            width: 240px;
+            height: 254px;
+            padding: 0 15px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            background: #fff;
+            border-radius: 20px;
+        }
+    </style>
+}
+
+<section class="testimonial py-5" id="testimonial">
+    <div class="container">
+        <div class="row">
+            <div class="card">
+                <h2 class="form-title">Thêm Vai Trò</h2>
+                @using (Html.BeginForm("AddRoleView", "Account", FormMethod.Post, new { @class = "form-horizontal", id = "AddRoleForm" }))
+                {
+                    <div class="input-container">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "input-field", placeholder = "Tên vai trò" })
+                        <label for="input-field" class="input-label">Tên vai trò</label>
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="btn-container">
+                        <div class="card-button-wrapper">
+                            <button onclick="window.location.href='@Url.Action("RoleView", "Account")'" type="button" class="card-button secondary">
+                                <i class="fa fa-times"></i> Hủy
+                            </button>
+                            <button type="submit" class="card-button primary" onclick="submitFormAjax()">
+                                <i class="fa fa-check"></i> Xác nhận
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section script{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="~/Content/css/textboxStyle.css" rel="stylesheet" />
+    <link href="~/Content/css/addBtnSubmitStyle.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('#AddRoleForm').on('submit', function (e) {
+                e.preventDefault();
+                const roleData = {
+                    Name: $('#Name').val()
+                };
+
+                $.ajax({
+                    url: '/Account/AddRoleView',
+                    type: 'POST',
+                    data: roleData,
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Role added successfully!');
+                            window.location.href = '/Account/RoleView';
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('An unexpected error occurred while adding the role.');
+                    }
+                });
+            });
+        });
+    </script>
+
+}

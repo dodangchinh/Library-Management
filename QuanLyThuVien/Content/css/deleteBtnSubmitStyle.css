@@ -1,0 +1,63 @@
+﻿/*Button*/
+
+.card-button-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card-button {
+    width: 50%;
+    height: 35px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.primary {
+    background-color: rgb(255, 102, 102);
+    color: white;
+}
+
+    .primary:hover {
+        background-color: rgb(204, 0, 0);
+    }
+
+.secondary {
+    background-color: #ddd;
+}
+
+    .secondary:hover {
+        background-color: rgb(204, 0, 0);
+    }
+
+.exit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+    .exit-button:hover svg {
+        fill: black;
+    }
+
+    .exit-button svg {
+        fill: rgb(175, 175, 175);
+    }
+
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

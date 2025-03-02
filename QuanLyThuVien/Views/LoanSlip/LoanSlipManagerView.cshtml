@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "LoanSlipManagerView";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary text-center mb-4">Quản Lý Phiếu Mượn Sách</h2>
+    <ul class="nav nav-tabs" id="bookManagerTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="addLoanSlip-tab" data-bs-toggle="tab" data-bs-target="#addLoanSlip" type="button" role="tab" aria-controls="addLoanSlip" aria-selected="true">
+                Tạo phiếu mượn
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="lstLoanSlip-tab" data-bs-toggle="tab" data-bs-target="#lstLoanSlip" type="button" role="tab" aria-controls="lstLoanSlip" aria-selected="false">
+                Danh sách Phiếu mượn sách
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content mt-3" id="bookManagerTabsContent">
+        <div class="tab-pane fade show active" id="addLoanSlip" role="tabpanel" aria-labelledby="addLoanSlip-tab">
+            @Html.Action("AddLoanSlipView", "LoanSLip")
+        </div>
+        <div class="tab-pane fade" id="lstLoanSlip" role="tabpanel" aria-labelledby="lstLoanSlip-tab">
+            @Html.Action("LoanSlipDetailView", "LoanSLip")
+        </div>
+    </div>
+</div>

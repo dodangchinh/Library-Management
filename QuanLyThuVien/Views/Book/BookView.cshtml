@@ -1,0 +1,153 @@
+﻿@model PagedList.PagedList<QuanLyThuVien.Book>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "BookView";
+    Layout = null; // Giữ null vì là partial view trong tab
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary"><i class="fas fa-book me-2"></i>Danh sách sách</h2>
+        <a href="@Url.Action("AddBookView", "Book")" class="btn btn-success">
+            <i class="fas fa-plus me-1"></i> Thêm sách
+        </a>
+    </div>
+
+    <div class="book-list-container">
+        <div class="row g-3">
+            @foreach (var book in Model)
+            {
+                if (book.Status)
+                {
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card h-100">
+                            <div class="card-img">
+                                <img src="@Url.Content(book.BookISBN.BookTitle.UrlImage)" alt="@book.BookISBN.BookTitle.Name" class="img-fluid">
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">@book.BookISBN.BookTitle.Name</h5>
+                                <p class="card-text flex-grow-1">
+                                    <small class="text-muted">Thể loại: @book.BookISBN.BookTitle.CategoryBook.Name</small><br>
+                                    <small class="text-muted">Tác giả: @book.BookISBN.Author.Name</small><br>
+                                    <small class="text-muted">Ngôn ngữ: @book.Language.Name</small><br>
+                                    <small class="text-muted">Dịch giả: @book.Translator.Name</small><br>
+                                    <small class="text-muted">NXB: @book.Publisher.Name</small>
+                                </p>
+                                <div class="mt-auto d-flex justify-content-between">
+                                    <a href="@Url.Action("EditBookView", "Book", new { id = book.Id })" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="@Url.Action("DeleteBookView", "Book", new { id = book.Id })" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa sách này?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Phân trang -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+            Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+        </div>
+        <div class="pagination-container">
+            @Html.PagedListPager(Model, page => Url.Action("BookView", new { page }),
+                     new PagedListRenderOptions
+                     {
+                         LiElementClasses = new[] { "page-item" },
+                         LinkToFirstPageFormat = "««",
+                         LinkToPreviousPageFormat = "«",
+                         LinkToNextPageFormat = "»",
+                         LinkToLastPageFormat = "»»",
+                         DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                         DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                         MaximumPageNumbersToDisplay = 5
+                     })
+        </div>
+    </div>
+</div>
+
+<style>
+    .book-list-container {
+        max-height: 600px; /* Tăng chiều cao để hiển thị nhiều sách hơn */
+        overflow-y: auto; /* Thanh cuộn dọc */
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f8f9fa; /* Màu nền nhạt hơn */
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s; /* Hiệu ứng hover */
+    }
+
+        .card:hover {
+            transform: translateY(-5px); /* Nâng nhẹ khi hover */
+        }
+
+    .card-img {
+        height: 180px; /* Chiều cao cố định cho ảnh */
+        overflow: hidden;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 1rem; /* 16px */
+        font-weight: 600;
+        color: #323232;
+        margin-bottom: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .card-text small {
+        font-size: 0.85rem; /* 13.6px */
+        line-height: 1.5;
+        color: #666;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+    }
+
+    .pagination-container .page-item .page-link {
+        color: #007bff;
+        border-radius: 5px;
+        margin: 0 2px;
+    }
+
+    .pagination-container .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .pagination-container .page-item.disabled .page-link {
+        color: #6c757d;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

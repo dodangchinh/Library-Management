@@ -1,0 +1,122 @@
+﻿@model IEnumerable<QuanLyThuVien.BookISBN>
+@{
+    ViewBag.Title = "BookISBNView";
+    Layout = null; // Giữ null vì là partial view trong tab
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+<div class="bookisbn-view-container">
+    <div class="header bg-primary text-white">
+        <h4 class="mb-0 p-2"><i class="fas fa-barcode"></i> Danh sách ISBN</h4>
+    </div>
+    <div class="content p-3">
+        <div class="mb-3">
+            <a href="@Url.Action("AddBookISBNView", "Book")" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i> Thêm ISBN
+            </a>
+        </div>
+
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 20%;">ISBN</th>
+                        <th style="width: 25%;">Tên Sách</th>
+                        <th style="width: 20%;">Tác giả</th>
+                        <th style="width: 15%;">Ngôn ngữ</th>
+                        <th style="width: 10%;">Tình trạng</th>
+                        <th style="width: 10%;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bookISBN in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@bookISBN.ISBN</td>
+                            <td>@bookISBN.BookTitle.Name</td>
+                            <td>@bookISBN.Author.Name</td>
+                            <td class="text-center">@bookISBN.Language.Name</td>
+                            <td class="text-center">
+                                @if (bookISBN.Status == true)
+                                {
+                                    <span class="badge bg-success">Còn</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Hết</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("EditBookISBNView", "Book", new { isbn = bookISBN.ISBN })"
+                                   class="btn btn-warning btn-sm"
+                                   title="Sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="@Url.Action("DeleteBookISBNView", "Book", new { isbn = bookISBN.ISBN })"
+                                   class="btn btn-danger btn-sm"
+                                   title="Xóa"
+                                   onclick="return confirm('Bạn có chắc muốn xóa ISBN này?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bookisbn-view-container {
+        width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    }
+
+    .header {
+        padding: 10px 15px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .table {
+        width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+        margin-bottom: 0;
+        border-radius: 8px; /* Bo góc cho bảng */
+        overflow: hidden; /* Đảm bảo nội dung không tràn ra ngoài khi bo góc */
+    }
+
+    .thead-dark th {
+        background-color: #6c757d; /* Màu xám trung bình */
+        color: #000000; /* Chữ đen */
+        font-weight: 500;
+        text-align: center;
+        vertical-align: middle;
+        position: sticky; /* Cố định tiêu đề khi cuộn */
+        top: 0;
+        z-index: 1;
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 8px;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.3em 0.6em;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Cuộn ngang nếu cần */
+        overflow-y: auto; /* Cuộn dọc đã được kích hoạt bởi max-height */
+        border-radius: 8px; /* Bo góc cho vùng cuộn */
+    }
+</style>

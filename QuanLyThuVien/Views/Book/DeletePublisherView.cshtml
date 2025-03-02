@@ -1,0 +1,119 @@
+﻿@model QuanLyThuVien.Publisher
+
+@{
+    ViewBag.Title = "DeletePublisherView";
+}
+
+@section style {
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0d6efd;
+        }
+
+        .form-check {
+            margin-top: 10px;
+        }
+
+        .card {
+            width: 240px;
+            height: 254px;
+            padding: 0 15px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            background: #fff;
+            border-radius: 20px;
+        }
+    </style>
+}
+
+<div class="container">
+    <div class="form-container">
+        <h2 class="form-title">Xóa Nhà Xuất Bản</h2>
+        @using (Html.BeginForm("DeletePublisherView", "Book", FormMethod.Post, new { @id = "deletePublisherForm" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+            <div class="input-container">
+                @Html.LabelFor(model => model.Name, "Thể loại", new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Name, new { @class = "finput-field", placeholder = "Thể loại", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-container">
+                @Html.LabelFor(model => model.Phone, "Số điện thoại", new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Phone, new { @class = "finput-field", placeholder = "Số điện thoại", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-container">
+                @Html.LabelFor(model => model.Address, "ĐỊa chỉ", new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Address, new { @class = "finput-field", placeholder = "Số điện thoại", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="alert alert-danger text-center" role="alert">
+                Bạn có chắc chắn muốn xóa Nhà Xuất Bản này không?
+            </div>
+
+            <div class="btn-container">
+                <div class="card-button-wrapper">
+                    <button onclick="window.location.href='@Url.Action("BookManagerView", "Book")'" type="button" class="card-button secondary">
+                        <i class="fa fa-times"></i> Hủy
+                    </button>
+                    <button type="submit" class="card-button primary">
+                        <i class="fa fa-check"></i> Xác nhận
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section script{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="~/Content/css/deleteBtnSubmitStyle.css" rel="stylesheet" />
+    <link href="~/Content/css/textboxStyle.css" rel="stylesheet" />
+    <script>
+        // JavaScript to handle form submission and show success message
+        document.getElementById("deletePublisherForm").onsubmit = function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Perform an AJAX request to the server
+            var formData = new FormData(event.target);
+            fetch('@Url.Action("DeletePublisherView", "Book")', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // Show success message
+                    window.location.href = '@Url.Action("BookManagerView", "Book")'; // Redirect to the main page
+                } else {
+                    alert("Error: " + data.message); // Show error message
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the form.');
+            });
+        };
+    </script>
+}

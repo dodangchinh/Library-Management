@@ -1,0 +1,137 @@
+﻿@model PagedList.PagedList<QuanLyThuVien.AccountRole>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "AccountView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<div class="container my-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="fas fa-user-cog"></i> Danh sách tài khoản</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <a href="@Url.Action("AddAccountView", "Account")" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Thêm tài khoản mới
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th>Tên</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Role</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var accountRole in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@accountRole.No</td>
+                                <td>@accountRole.account.Name</td>
+                                <td>@accountRole.account.Username</td>
+                                <td>@accountRole.role.Name</td>
+                                <td class="text-center">
+                                    @if (accountRole.account.Status == true)
+                                    {
+                                        <span class="badge bg-success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Khóa</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (accountRole.account.Name.CompareTo(Html.GetUsername()) != 0)
+                                    {
+                                        <a href="@Url.Action("EditAccountView", "Account", new { no = accountRole.No })"
+                                           class="btn btn-sm btn-warning"
+                                           title="Sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Phân trang -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                </div>
+                <div class="pagination-container">
+                    @Html.PagedListPager(Model, page => Url.Action("AccountView", new { page }),
+                             new PagedListRenderOptions
+                             {
+                                 LiElementClasses = new[] { "page-item" },
+                                 LinkToFirstPageFormat = "««",
+                                 LinkToPreviousPageFormat = "«",
+                                 LinkToNextPageFormat = "»",
+                                 LinkToLastPageFormat = "»»",
+                                 DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                                 DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                                 MaximumPageNumbersToDisplay = 5
+                             })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section style {
+    <style>
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .table th {
+            vertical-align: middle;
+            background-color: #343a40; /* Nền xám đậm */
+            color: #000000; /* Chữ đen */
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+        }
+
+        .badge {
+            font-size: 0.9rem;
+            padding: 0.4em 0.6em;
+        }
+
+        .pagination-container .page-item .page-link {
+            color: #007bff;
+            border-radius: 5px;
+            margin: 0 2px;
+        }
+
+        .pagination-container .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .pagination-container .page-item.disabled .page-link {
+            color: #6c757d;
+        }
+    </style>
+}

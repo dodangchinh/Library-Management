@@ -1,0 +1,130 @@
+﻿@model PagedList.PagedList<QuanLyThuVien.ReaderInformation>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "ReaderView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<div class="container my-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0"><i class="fas fa-users"></i> Danh sách độc giả</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <a href="@Url.Action("AddReaderView", "Reader")" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Thêm độc giả mới
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center">ID</th>
+                            <th>Tên</th>
+                            <th>Ngày sinh</th>
+                            <th>CCCD</th>
+                            <th>Email</th>
+                            <th>Giới tính</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var reader in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@reader.ReaderID</td>
+                                <td>@reader.Reader.Name</td>
+                                <td>@reader.BOF.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@reader.CitizenID</td>
+                                <td>@reader.Email</td>
+                                <td class="text-center">
+                                    @(reader.Gender ? "Nam" : "Nữ")
+                                </td>
+                                <td class="text-center">
+                                    <a href="@Url.Action("EditReaderView", "Reader", new { readerID = reader.ReaderID })"
+                                       class="btn btn-sm btn-warning"
+                                       title="Sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="@Url.Action("DeleteReaderView", "Reader", new { readerID = reader.ReaderID })"
+                                       class="btn btn-sm btn-danger"
+                                       title="Xóa"
+                                       onclick="return confirm('Bạn có chắc muốn xóa độc giả này?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Phân trang -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                </div>
+                <div class="pagination-container">
+                    @Html.PagedListPager(Model, page => Url.Action("ReaderView", new { page }),
+                             new PagedListRenderOptions
+                             {
+                                 LiElementClasses = new[] { "page-item" },
+                                 LinkToFirstPageFormat = "««",
+                                 LinkToPreviousPageFormat = "«",
+                                 LinkToNextPageFormat = "»",
+                                 LinkToLastPageFormat = "»»",
+                                 DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                                 DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                                 MaximumPageNumbersToDisplay = 5
+                             })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section style {
+    <style>
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .table th {
+            vertical-align: middle;
+            background-color: #343a40; /* Giữ màu nền xám đậm */
+            color: #000000; /* Đổi màu chữ thành đen */
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+        }
+
+        .pagination-container .page-item .page-link {
+            color: #007bff;
+            border-radius: 5px;
+            margin: 0 2px;
+        }
+
+        .pagination-container .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .pagination-container .page-item.disabled .page-link {
+            color: #6c757d;
+        }
+    </style>
+}

@@ -1,0 +1,120 @@
+﻿@model IEnumerable<QuanLyThuVien.Author>
+@{
+    ViewBag.Title = "AuthorView";
+    Layout = null; // Giữ null vì là partial view trong tab
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+<div class="author-view-container">
+    <div class="header bg-primary text-white">
+        <h4 class="mb-0 p-2"><i class="fas fa-user-edit"></i> Danh sách tác giả</h4>
+    </div>
+    <div class="content p-3">
+        <div class="mb-3">
+            <a href="@Url.Action("AddAuthorView", "Book")" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i> Thêm tác giả
+            </a>
+        </div>
+
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 10%;">ID</th>
+                        <th style="width: 30%;">Tên</th>
+                        <th style="width: 20%;">Ngày sinh</th>
+                        <th style="width: 15%;">Tình trạng</th>
+                        <th style="width: 25%;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var author in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@author.Id</td>
+                            <td>@author.Name</td>
+                            <td class="text-center">@author.BOF.Value.ToString("dd-MM-yyyy")</td>
+                            <td class="text-center">
+                                @if (author.Status == true)
+                                {
+                                    <span class="badge bg-success">Còn sống</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Đã mất</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("EditAuthorView", "Book", new { id = author.Id })"
+                                   class="btn btn-warning btn-sm"
+                                   title="Sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="@Url.Action("DeleteAuthorView", "Book", new { id = author.Id })"
+                                   class="btn btn-danger btn-sm"
+                                   title="Xóa"
+                                   onclick="return confirm('Bạn có chắc muốn xóa tác giả này?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .author-view-container {
+        width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    }
+
+    .header {
+        padding: 10px 15px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .table {
+        width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+        margin-bottom: 0;
+        border-radius: 8px; /* Bo góc cho bảng */
+        overflow: hidden; /* Đảm bảo nội dung không tràn ra ngoài khi bo góc */
+    }
+
+    .thead-dark th {
+        background-color: #6c757d; /* Đổi màu nền từ đen sang xám */
+        color: #000000; /* Chữ đen */
+        font-weight: 500;
+        text-align: center;
+        vertical-align: middle;
+        position: sticky; /* Cố định tiêu đề khi cuộn */
+        top: 0;
+        z-index: 1;
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 8px;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.3em 0.6em;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Cuộn ngang nếu cần */
+        overflow-y: auto; /* Cuộn dọc đã được kích hoạt bởi max-height */
+        border-radius: 8px; /* Bo góc cho vùng cuộn */
+    }
+</style>

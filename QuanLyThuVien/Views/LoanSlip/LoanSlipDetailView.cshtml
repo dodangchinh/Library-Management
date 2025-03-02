@@ -1,0 +1,389 @@
+﻿@model PagedList.PagedList<QuanLyThuVien.LoanSlip>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "LoanSlipDetailView";
+    Layout = null; // Giữ null vì là partial view trong tab
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<div class="loanslip-view-container">
+    <div class="header bg-primary text-white">
+        <h4 class="mb-0 p-2"><i class="fas fa-file-alt"></i> Danh sách phiếu mượn</h4>
+    </div>
+    <div class="content p-3">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 20%;">Độc giả</th>
+                        <th style="width: 20%;">Nhân viên</th>
+                        <th style="width: 15%;">Ngày mượn</th>
+                        <th style="width: 15%;">Ngày trả</th>
+                        <th style="width: 15%;">Tiền cọc</th>
+                        <th style="width: 15%;">Tiền mượn</th>
+                        <th style="width: 10%;">#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        if (item.Status)
+                        {
+                            <tr>
+                                <td>@item.ReaderInformation.Reader.Name</td>
+                                <td>@item.Account.Name</td>
+                                <td class="text-center">@item.BorrowDate</td>
+                                <td class="text-center">@item.DueDate</td>
+                                <td class="text-center">@item.TotalDepositPrice.ToString("0.000")</td>
+                                <td class="text-center">@item.TotalRentalPrice.ToString("0.000")</td>
+                                <td class="text-center">
+                                    <button id="myBtn-@item.Id" onclick="openModal('myModal-@item.Id')" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> Xem
+                                    </button>
+                                    <!-- The Modal -->
+                                    <div id="myModal-@item.Id" class="modal">
+                                        <div class="modal-content">
+                                            <span class="close" onclick="closeModal('myModal-@item.Id')">×</span>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h4>Thông tin độc giả</h4>
+                                                    <div class="form-section">
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">Độc giả</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.ReaderInformation.Reader.Name</span>
+                                                                <input type="hidden" name="ReaderName" value="@item.ReaderInformation.Reader.Name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">Ngày sinh</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.ReaderInformation.BOF.Value.ToString("dd/MM/yyyy")</span>
+                                                                <input type="hidden" name="ReaderBOF" value="@item.ReaderInformation.BOF.Value.ToString("dd/MM/yyyy")" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">CCCD</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.ReaderInformation.CitizenID</span>
+                                                                <input type="hidden" name="ReaderCitizenID" value="@item.ReaderInformation.CitizenID" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">Email</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.ReaderInformation.Email</span>
+                                                                <input type="hidden" name="ReaderEmail" value="@item.ReaderInformation.Email" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h4>Thông tin mượn</h4>
+                                                    <div class="form-section">
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">Ngày mượn</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.BorrowDate</span>
+                                                                <input type="hidden" name="BorrowDate" value="@item.BorrowDate.Value" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">Hạn trả</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.DueDate</span>
+                                                                <input type="hidden" name="DueDate" value="@item.DueDate" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">Tiền cọc</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.TotalDepositPrice.ToString("0.000")</span>
+                                                                <input type="hidden" name="DepositPrice" value="@item.TotalDepositPrice.ToString("0.000")" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label class="col-md-4">Tiền mượn</label>
+                                                            <div class="col-md-8">
+                                                                <span class="form-control-plaintext">@item.TotalRentalPrice.ToString("0.000")</span>
+                                                                <input type="hidden" name="RentalPrice" value="@item.TotalRentalPrice.ToString("0.000")" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="book-list-container mt-4">
+                                                <div class="row" id="bookList">
+                                                    @foreach (var loanSlipDetail in item.ListLoanSlipDetail)
+                                                    {
+                                                        <div class="col-md-4 mb-4">
+                                                            <div class="card">
+                                                                <div class="card-img">
+                                                                    <img src="@Url.Content(loanSlipDetail.Book.BookISBN.BookTitle.UrlImage)" alt="Book Image">
+                                                                </div>
+                                                                <div class="card-content">
+                                                                    <div class="card-title">@loanSlipDetail.Book.BookISBN.BookTitle.Name</div>
+                                                                    <div class="card-subtitle">Thể loại: @loanSlipDetail.Book.BookISBN.BookTitle.CategoryBook.Name</div>
+                                                                    <div class="card-subtitle">Tác giả: @loanSlipDetail.Book.BookISBN.Author.Name</div>
+                                                                    <div class="card-subtitle">Ngôn ngữ: @loanSlipDetail.Book.Language.Name</div>
+                                                                    <div class="card-subtitle">Dịch giả: @loanSlipDetail.Book.Translator.Name</div>
+                                                                    <div class="card-subtitle">NXB: @loanSlipDetail.Book.Publisher.Name</div>
+                                                                    <div class="card-footer">
+                                                                        <span>Tiền cọc: @loanSlipDetail.DepositPrice.ToString("0.000") VND</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Phân trang -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+            </div>
+            <div class="pagination-container">
+                @Html.PagedListPager(Model, page => Url.Action("LoanSlipDetailView", new { page }),
+                         new PagedListRenderOptions
+                         {
+                             LiElementClasses = new[] { "page-item" },
+                             LinkToFirstPageFormat = "««",
+                             LinkToPreviousPageFormat = "«",
+                             LinkToNextPageFormat = "»",
+                             LinkToLastPageFormat = "»»",
+                             DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                             DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                             MaximumPageNumbersToDisplay = 5
+                         })
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .loanslip-view-container {
+        width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    }
+
+    .header {
+        padding: 10px 15px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .table {
+        width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+        margin-bottom: 0;
+        border-radius: 8px; /* Bo góc cho bảng */
+        overflow: hidden; /* Đảm bảo nội dung không tràn ra ngoài khi bo góc */
+    }
+
+    .thead-dark th {
+        background-color: #6c757d; /* Màu xám trung bình */
+        color: #000000; /* Chữ đen */
+        font-weight: 500;
+        text-align: center;
+        vertical-align: middle;
+        position: sticky; /* Cố định tiêu đề khi cuộn */
+        top: 0;
+        z-index: 1;
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 8px;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.3em 0.6em;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Cuộn ngang nếu cần */
+        overflow-y: auto; /* Cuộn dọc đã được kích hoạt bởi max-height */
+        border-radius: 8px; /* Bo góc cho vùng cuộn */
+    }
+
+    .pagination-container .page-item .page-link {
+        color: #007bff;
+        border-radius: 5px;
+        margin: 0 2px;
+    }
+
+    .pagination-container .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .pagination-container .page-item.disabled .page-link {
+        color: #6c757d;
+    }
+
+    /* Giữ nguyên style cho modal và danh sách sách */
+    .book-list-container {
+        max-height: 500px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .card {
+        --font-color: #323232;
+        --font-color-sub: #666;
+        --bg-color: #fff;
+        --main-color: #323232;
+        --main-focus: #2d8cf0;
+        width: 100%;
+        max-width: 230px;
+        height: 330px;
+        background: var(--bg-color);
+        border: 2px solid var(--main-color);
+        box-shadow: 4px 4px var(--main-color);
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        overflow: hidden;
+    }
+
+    .card-title {
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        color: var(--font-color);
+        word-wrap: break-word;
+        white-space: normal;
+        line-height: 1.4;
+        overflow: hidden;
+    }
+
+    .card-subtitle {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--font-color-sub);
+        word-wrap: break-word;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .card-img {
+        width: 100%;
+        height: 50%;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .card-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+    .card-content {
+        width: 100%;
+        height: 50%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        background-color: var(--bg-color);
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .row.mb-3 {
+        margin-bottom: 5px;
+    }
+</style>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        const modals = document.getElementsByClassName("modal");
+        for (let i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = "none";
+            }
+        }
+    }
+</script>

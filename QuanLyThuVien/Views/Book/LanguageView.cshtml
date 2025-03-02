@@ -1,0 +1,102 @@
+﻿@model IEnumerable<QuanLyThuVien.Language>
+@{
+    ViewBag.Title = "LanguageView";
+    Layout = null; // Giữ null vì là partial view trong tab
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+<div class="language-view-container">
+    <div class="header bg-primary text-white">
+        <h4 class="mb-0 p-2"><i class="fas fa-language"></i> Danh sách ngôn ngữ</h4>
+    </div>
+    <div class="content p-3">
+        <div class="mb-3">
+            <a href="@Url.Action("AddLanguageView", "Book")" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i> Thêm ngôn ngữ
+            </a>
+        </div>
+
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 30%;">ID</th>
+                        <th style="width: 50%;">Tên</th>
+                        <th style="width: 20%;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var language in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@language.Id</td>
+                            <td>@language.Name</td>
+                            <td class="text-center">
+                                <a href="@Url.Action("EditLanguageView", "Book", new { id = language.Id })"
+                                   class="btn btn-warning btn-sm"
+                                   title="Sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="@Url.Action("DeleteLanguageView", "Book", new { id = language.Id })"
+                                   class="btn btn-danger btn-sm"
+                                   title="Xóa"
+                                   onclick="return confirm('Bạn có chắc muốn xóa ngôn ngữ này?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .language-view-container {
+        width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    }
+
+    .header {
+        padding: 10px 15px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .table {
+        width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+        margin-bottom: 0;
+        border-radius: 8px; /* Bo góc cho bảng */
+        overflow: hidden; /* Đảm bảo nội dung không tràn ra ngoài khi bo góc */
+    }
+
+    .thead-dark th {
+        background-color: #6c757d; /* Màu xám trung bình */
+        color: #000000; /* Chữ đen */
+        font-weight: 500;
+        text-align: center;
+        vertical-align: middle;
+        position: sticky; /* Cố định tiêu đề khi cuộn */
+        top: 0;
+        z-index: 1;
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 8px;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Cuộn ngang nếu cần */
+        overflow-y: auto; /* Cuộn dọc đã được kích hoạt bởi max-height */
+        border-radius: 8px; /* Bo góc cho vùng cuộn */
+    }
+</style>

@@ -1,0 +1,120 @@
+﻿@model QuanLyThuVien.Statistical
+@{
+    ViewBag.Title = "Welcome to Library Manager";
+}
+
+<body>
+    <div class="container text-center mt-5" style="color: #000000; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
+        @if (User.IsInRole("Admin"))
+        {
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+            <div class="container my-5">
+                <h1 class="text-center mb-4 text-primary"><i class="fas fa-chart-bar me-2"></i>Thống kê thư viện</h1>
+                <div class="row g-4">
+                    <!-- Sách đang mượn -->
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card stat-card text-white bg-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-book-open fa-2x mb-3"></i>
+                                <h5 class="card-title">Sách đang mượn</h5>
+                                <p class="card-text display-6">@Model.nBorrowedBooks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sách chưa mượn -->
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card stat-card text-white bg-warning">
+                            <div class="card-body text-center">
+                                <i class="fas fa-book fa-2x mb-3"></i>
+                                <h5 class="card-title">Sách chưa mượn</h5>
+                                <p class="card-text display-6">@Model.nUnborrowedBooks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Đầu sách -->
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card stat-card text-white bg-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-barcode fa-2x mb-3"></i>
+                                <h5 class="card-title">Đầu sách</h5>
+                                <p class="card-text display-6">@Model.nISBNBooks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phiếu mượn -->
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card stat-card text-white bg-danger">
+                            <div class="card-body text-center">
+                                <i class="fas fa-file-alt fa-2x mb-3"></i>
+                                <h5 class="card-title">Phiếu mượn</h5>
+                                <p class="card-text display-6">@Model.nLoanSlips</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lịch sử phiếu mượn -->
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card stat-card text-white bg-purple">
+                            <div class="card-body text-center">
+                                <i class="fas fa-history fa-2x mb-3"></i>
+                                <h5 class="card-title">Lịch sử phiếu mượn</h5>
+                                <p class="card-text display-6">@Model.nHistoryLoanSlips</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Độc giả -->
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card stat-card text-white bg-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-2x mb-3"></i>
+                                <h5 class="card-title">Độc giả</h5>
+                                <p class="card-text display-6">@Model.nReaders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                .stat-card {
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    height: 100%; /* Đảm bảo các card có chiều cao bằng nhau */
+                }
+
+                    .stat-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                    }
+
+                    .stat-card .card-body {
+                        padding: 20px;
+                    }
+
+                    .stat-card .card-title {
+                        font-size: 1.1rem;
+                        margin-bottom: 15px;
+                    }
+
+                    .stat-card .card-text {
+                        font-weight: 700;
+                        margin: 0;
+                    }
+
+                /* Màu tùy chỉnh cho thẻ Lịch sử phiếu mượn */
+                .bg-purple {
+                    background-color: #963D97;
+                }
+            </style>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        }
+    </div>
+</body>

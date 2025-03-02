@@ -1,0 +1,120 @@
+﻿@model QuanLyThuVien.Publisher
+
+@{
+    ViewBag.Title = "AddPublisherView";
+}
+
+@section style{
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0d6efd;
+        }
+
+        .form-check {
+            margin-top: 10px;
+        }
+
+        .card {
+            width: 240px;
+            height: 254px;
+            padding: 0 15px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            background: #fff;
+            border-radius: 20px;
+        }
+    </style>
+}
+
+<div class="testimonial py-5" id="testimonial">
+    <div class="container">
+        <div class="row">
+            <div class="card">
+                <h2 class="form-title">Thêm Nhà Xuất Bản</h2>
+                @using (Html.BeginForm("AddPublisherView", "Book", FormMethod.Post, new { @class = "form-horizontal", id = "addPublisherForm" }))
+                {
+                    <div class="input-container">
+                        @Html.TextBoxFor(model => model.Name, new { @class = "input-field", placeholder = "Tên" })
+                        <label for="input-field" class="input-label">Tên</label>
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-container">
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "input-field", placeholder = "Số điện thoại" })
+                        <label for="input-field" class="input-label">Số điện thoại</label>
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="input-container">
+                        @Html.TextBoxFor(model => model.Address, new { @class = "input-field", placeholder = "Địa chỉ" })
+                        <label for="input-field" class="input-label">Địa chỉ</label>
+                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="btn-container">
+                        <div class="card-button-wrapper">
+                            <button onclick="window.location.href='@Url.Action("BookManagerView", "Book")'" type="button" class="card-button secondary">
+                                <i class="fa fa-times"></i> Hủy
+                            </button>
+                            <button type="submit" class="card-button primary">
+                                <i class="fa fa-check"></i> Xác nhận
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section script{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="~/Content/css/textboxStyle.css" rel="stylesheet" />
+    <link href="~/Content/css/addBtnSubmitStyle.css" rel="stylesheet" />
+    <script>
+        // Xử lý khi submit form
+        document.getElementById("addPublisherForm").onsubmit = function(event) {
+            event.preventDefault(); // Ngăn chặn submit mặc định
+
+            var formData = new FormData(this);
+
+            // Gửi dữ liệu form qua AJAX
+            fetch('@Url.Action("AddPublisherView", "Book")', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Thêm nhà xuất bản thành công!");
+                    window.location.href = '@Url.Action("BookManagerView", "Book")'; // Quay lại trang chính
+                } else {
+                    alert("Đã xảy ra lỗi: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Có lỗi xảy ra:', error);
+                alert("Đã xảy ra lỗi trong quá trình gửi yêu cầu.");
+            });
+        };
+    </script>
+}

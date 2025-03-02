@@ -1,0 +1,59 @@
+﻿/* From Uiverse.io by andrew-demchenk0 */
+.btnDownload {
+    position: relative;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid #17795E;
+    background-color: #209978;
+    overflow: hidden;
+}
+
+.btnDownload, .btnDownload__icon, .btnDownload__text {
+    transition: all 0.3s;
+}
+
+    .btnDownload .btnDownload__text {
+        transform: translateX(22px);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .btnDownload .btnDownload__icon {
+        position: absolute;
+        transform: translateX(109px);
+        height: 100%;
+        width: 39px;
+        background-color: #17795E;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btnDownload .svg {
+        width: 20px;
+        fill: #fff;
+    }
+
+    .btnDownload:hover {
+        background: #17795E;
+    }
+
+        .btnDownload:hover .btnDownload__text {
+            color: transparent;
+        }
+
+        .btnDownload:hover .btnDownload__icon {
+            width: 148px;
+            transform: translateX(0);
+        }
+
+    .btnDownload:active .btnDownload__icon {
+        background-color: #146c54;
+    }
+
+    .btnDownload:active {
+        border: 1px solid #146c54;
+    }
